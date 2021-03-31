@@ -10,6 +10,10 @@ struct ResponseType{
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     let args: Vec<String> = env::args().collect();
+    if args.len() < 3 {
+        eprintln!("Missing ARGS: base_currency [USD] wanted_currency [BRL]");
+        std::process::exit(1)
+    }
     let base_currency = &args[1];
     let wanted_currency = &args[2];
     let url = "https://api.exchangeratesapi.io/latest?base=".to_owned() + base_currency;
