@@ -15,12 +15,13 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
         std::process::exit(1)
     }
     let base_currency = &args[1];
-    let wanted_currency = &args[2];
+    let wanted_currency = &args[2].to_uppercase();
     let url = "https://api.exchangeratesapi.io/latest?base=".to_owned() + base_currency;
     let res: ResponseType = reqwest::get(url)
         .await?
         .json()
         .await?;
-    println!("{}", res.rates.get(wanted_currency).unwrap());
+    let output = res.rates.get(wanted_currency).expect("Invalid currency.");
+    println!("{}", output);
     Ok(())
 }
