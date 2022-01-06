@@ -13,9 +13,9 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let currency_key = base_currency.to_owned() + "_" + wanted_currency;
 
-    // Load settings (Settings.toml)
+    // Load settings (settings.toml)
     let mut settings = config::Config::default();
-    settings.merge(config::File::with_name("Settings")).unwrap();
+    settings.merge(config::File::with_name("settings")).unwrap();
 
     // Send and process request
     let url =
