@@ -1,4 +1,5 @@
 use std::env;
+use config::{Source};
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
@@ -13,14 +14,15 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
     let currency_key = base_currency.to_owned() + "_" + wanted_currency;
 
-    // Load settings (settings.toml)
-    let mut settings = config::Config::default();
-    settings.merge(config::File::with_name("settings")).unwrap();
+    // Load settings
+    let mut settings_path = dirs::config_dir().unwrap();
+    settings_path.push("./rustycoins/settings.toml");
+    let settings_map = config::File::from(settings_path).collect().unwrap();
 
     // Send and process request
     let url =
         format!("https://free.currconv.com/api/v7/convert?apiKey={api_key}&q={query}&compact=ultra",
-            api_key = settings.get_str("api_key").unwrap(),
+            api_key = settings_map.get("api_key").unwrap(),
             query = currency_key
         );
 
